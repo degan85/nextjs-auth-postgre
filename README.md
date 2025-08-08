@@ -1,36 +1,145 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Auth Demo
 
-## Getting Started
+A modern authentication system built with Next.js 15, NextAuth.js v5 (Auth.js), Google OAuth, and Neon PostgreSQL.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- ✅ Next.js 15 with App Router
+- ✅ NextAuth.js v5 (Auth.js) 
+- ✅ Google OAuth Authentication
+- ✅ Neon PostgreSQL Database
+- ✅ Prisma ORM
+- ✅ TypeScript
+- ✅ Tailwind CSS
+- ✅ Vercel Deployment Ready
+
+## Setup Instructions
+
+### 1. Database Setup (Neon)
+
+1. Create a Neon account at [neon.tech](https://neon.tech)
+2. Create a new project
+3. Copy the connection string from the dashboard
+4. Update `.env.local` with your `DATABASE_URL`
+
+### 2. Google OAuth Setup
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com)
+2. Create a new project or select existing
+3. Enable Google+ API
+4. Create OAuth 2.0 credentials:
+   - Application type: Web application
+   - Authorized JavaScript origins: `http://localhost:3000`, `https://your-domain.vercel.app`
+   - Authorized redirect URIs: 
+     - `http://localhost:3000/api/auth/callback/google`
+     - `https://your-domain.vercel.app/api/auth/callback/google`
+5. Copy Client ID and Client Secret to `.env.local`
+
+### 3. Environment Variables
+
+Update `.env.local`:
+
+```env
+# NextAuth.js v5 uses AUTH_ prefix
+AUTH_SECRET=your_generated_secret_here
+AUTH_GOOGLE_ID=your_google_client_id
+AUTH_GOOGLE_SECRET=your_google_client_secret
+
+# Neon PostgreSQL Database  
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public&sslmode=require"
+
+# Next.js
+NEXTAUTH_URL=http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 4. Database Migration
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Generate Prisma client
+npx prisma generate
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Push schema to database
+npx prisma db push
 
-## Learn More
+# (Optional) Open Prisma Studio
+npx prisma studio
+```
 
-To learn more about Next.js, take a look at the following resources:
+### 5. Development
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+# Install dependencies
+npm install
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# Run development server
+npm run dev
+```
 
-## Deploy on Vercel
+Open [http://localhost:3000](http://localhost:3000) to see the app.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment (Vercel)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### 1. Deploy to Vercel
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy
+vercel
+```
+
+### 2. Add Environment Variables
+
+In Vercel dashboard, add these environment variables:
+- `AUTH_SECRET`
+- `AUTH_GOOGLE_ID` 
+- `AUTH_GOOGLE_SECRET`
+- `DATABASE_URL`
+
+### 3. Update Google OAuth
+
+Add your Vercel domain to Google OAuth settings:
+- Authorized JavaScript origins: `https://your-app.vercel.app`
+- Authorized redirect URIs: `https://your-app.vercel.app/api/auth/callback/google`
+
+## Tech Stack
+
+- **Framework**: Next.js 15
+- **Authentication**: NextAuth.js v5 (Auth.js)
+- **Database**: Neon PostgreSQL
+- **ORM**: Prisma
+- **Styling**: Tailwind CSS
+- **Language**: TypeScript
+- **Deployment**: Vercel
+
+## Project Structure
+
+```
+src/
+  app/
+    api/auth/[...nextauth]/route.ts  # Auth API routes
+    layout.tsx                       # Root layout with SessionProvider  
+    page.tsx                        # Home page with auth
+  components/
+    auth-buttons.tsx                # Sign in/out buttons
+  lib/
+    prisma.ts                      # Prisma client singleton
+  auth.ts                          # NextAuth configuration
+prisma/
+  schema.prisma                    # Database schema
+```
+
+## NextAuth.js v5 Migration Notes
+
+This project uses NextAuth.js v5 (Auth.js) which has breaking changes from v4:
+
+- Package: `next-auth@beta` and `@auth/prisma-adapter`
+- Environment variables use `AUTH_*` prefix instead of `NEXTAUTH_*`
+- New `auth.ts` configuration file structure  
+- Simplified API route handlers
+- Universal `auth()` function replaces `getServerSession()`
+
+## License
+
+MIT
