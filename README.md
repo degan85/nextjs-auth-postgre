@@ -77,21 +77,19 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) to see the app.
 
-## Deployment (Vercel)
+## Deployment (Vercel via GitHub)
 
 ### 1. Deploy to Vercel
 
-```bash
-# Install Vercel CLI
-npm i -g vercel
-
-# Deploy
-vercel
-```
+1. Go to [Vercel Dashboard](https://vercel.com/dashboard)
+2. Click "New Project"
+3. Import your GitHub repository: `degan85/nextjs-auth-postgre`
+4. Vercel will automatically detect Next.js and configure build settings
+5. Click "Deploy"
 
 ### 2. Add Environment Variables
 
-In Vercel dashboard, add these environment variables:
+In Vercel project settings, add these environment variables:
 - `AUTH_SECRET`
 - `AUTH_GOOGLE_ID` 
 - `AUTH_GOOGLE_SECRET`
@@ -100,8 +98,8 @@ In Vercel dashboard, add these environment variables:
 ### 3. Update Google OAuth
 
 Add your Vercel domain to Google OAuth settings:
-- Authorized JavaScript origins: `https://your-app.vercel.app`
-- Authorized redirect URIs: `https://your-app.vercel.app/api/auth/callback/google`
+- Authorized JavaScript origins: `https://your-project-name.vercel.app`
+- Authorized redirect URIs: `https://your-project-name.vercel.app/api/auth/callback/google`
 
 ## Tech Stack
 
